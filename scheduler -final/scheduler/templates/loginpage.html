@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <title>login page</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans%3A400%2C700"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro%3A400%2C700"/>
+  <link rel="stylesheet" href="static\css\loginpage.css"/>
+</head>
+<body>
+
+<div class="login-page-5ms">
+  <div class="background-6gy">
+    
+    <div class="loginbody-cHw">
+      <div class="auto-group-bhk5-JwT">
+        <p class="login-puo">COURSE SCHEDULER</p>
+        <p class="please-enter-you-login-and-your-password-hCu">LOGIN</p>
+      </div>
+      
+       <div class="login-box-o13">
+       <p class="username-or-e-mail-XSq">Username or E-mail</p>
+       <img class="akar-icons-person-Cos" src="static\images\akar-icons-person.png"/>
+       <div class="logininput-7fw">
+         <input type="text" placeholder="Enter your username or email" name="username">
+       </div>
+     </div>
+     
+     <div class="password-box-RRj">
+       <p class="password-Znq">Password</p>
+       <img class="carbon-password-UQ1" src="static\images\carbon-password.png"/>
+       <div class="logininput-CL1">
+         <input type="password" placeholder="Enter your password" name="password">
+       </div>
+     </div>
+      <div class="btlogin-Qws">
+       <input type="submit" id="login" name="login" value="Login">
+     </div>
+     
+      <div class="registertext-EJd">
+        <p class="register-ATB">Register!</p>
+        <p class="not-a-member-yet-mC5">Not a member yet?</p>
+      </div>
+    </div>
+    
+  </div>
+</div>
+<script type="module">
+       // Import the functions you need from the SDKs you need
+       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+       import { getDatabase, set,ref,update } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+       import { getAuth, createUserWithEmailAndPassword,signInWithEmailAndPassword, onAuthStateChanged ,signOut} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+   
+       // Your web app's Firebase configuration
+       const firebaseConfig = {
+           apiKey: "AIzaSyD0R29hzTEcZqRTBFx7XNbWf2kvuYmJFNQ",
+           authDomain: "authencation-app-b0f51.firebaseapp.com",
+           databaseURL: "https://authencation-app-b0f51-default-rtdb.firebaseio.com",
+           projectId: "authencation-app-b0f51",
+           storageBucket: "authencation-app-b0f51.appspot.com",
+           messagingSenderId: "919237596179",
+           appId: "1:919237596179:web:a7617a7cafb4f72ffb5be6"
+       };
+   
+       // Initialize Firebase
+       const app = initializeApp(firebaseConfig);
+       const database = getDatabase(app);
+       const auth = getAuth();
+
+       document.getElementById('login').addEventListener('click', (e) => {
+              var email = document.querySelector('.logininput-7fw input').value;
+              var password = document.querySelector('.logininput-CL1 input').value;
+
+              signInWithEmailAndPassword(auth, email, password)
+              .then((userCredential) => {
+              // Signed in 
+              const user = userCredential.user;
+              const dt = new Date();
+              update(ref(database,'users/'+ user.uid),{
+                     last_login: dt,
+                   })
+                   alert('User logged in');
+                   window.location.href = "{{ url_for('admin') }}";
+              })
+              .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              alert("error message");
+              });
+       })
+
+       const user = auth.currentUser;
+       onAuthStateChanged(auth, (user) => {
+              if (user) {
+              // User is signed in, see docs for a list of available properties
+              // https://firebase.google.com/docs/reference/js/auth.user
+              const uid = user.uid;
+              // ...
+              } else {
+              // User is signed out
+              // ...
+              }
+              });
+
+       logout.addEventListener('click',(e)=>{
+              signOut(auth).then(() => {
+              // Sign-out successful.
+              alert('User signout')
+              }).catch((error) => {
+              // An error happened.
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              alert("error message");
+              });
+
+       })
+
+   </script>
+</body>
+</html>

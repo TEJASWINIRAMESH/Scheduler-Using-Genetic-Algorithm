@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>Signup Page</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans%3A400%2C700"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro%3A400%2C700"/>
+    <link rel="stylesheet" href="static\css\signup.css"/>
+    <!-- Link to the same CSS file used for the login page -->
+</head>
+<body>
+       <div class="signup-page-5ms">
+              <div class="background-6gy">
+                    <!-- <form action="{{ url_for('loginpage') }}" method="get">-->
+                      <div class="signupbody-cHw">
+                          <div class="auto-group-bhk5-JwT">
+                              <p class="signup-puo">COURSE SCHEDULER</p>
+                              <p class="please-enter-details-hCu">SIGNUP</p>
+                          </div>
+          
+                          <div class="signup-box-o13">
+                              <p class="username-or-e-mail-XSq">Username or E-mail</p>
+                              <img class="akar-icons-person-Cos" src="static\images\akar-icons-person.png"/>
+                              <div class="signupinput-7fw">
+                                  <input type="text" placeholder="Enter your username " name="username" id="username">
+                              </div>
+                          </div>
+                          <div class="signup-box-o13">
+                            <p class="username-or-e-mail-XSq">Username or E-mail</p>
+                            <img class="akar-icons-person-Cos" src="static\images\akar-icons-person.png"/>
+                            <div class="signupinput-7fw">
+                                <input type="text" placeholder="Enter your email" name="email" id="email">
+                            </div>
+                        </div>
+                          <div class="password-box-RRj">
+                              <p class="password-Znq">Password</p>
+                              <img class="carbon-password-UQ1" src="static\images\carbon-password.png"/>
+                              <div class="signupinput-CL1">
+                                  <input type="password" placeholder="Enter your password" name="password" id="password">
+                              </div>
+                          </div>
+          
+                          <!-- Add more signup fields as needed -->
+          
+                          <div class="btsignup-Qws">
+                              <!--<button type="submit" value="signup" id="signUp">Sign Up</button>-->
+                              <input type="submit" id="signUp" name="signup_submit" value="sign up">
+                          </div>
+          
+                     
+          
+                          <div class="logintext-EJd">
+                              <p class="login-ATB">Already have an account?</p>
+                              <p class="member-yet-mC5"><a href="{{ url_for('loginpage') }}">Login here</a></p>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+          
+            <script type="module">
+              // Import the functions you need from the SDKs you need
+              import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+              import { getDatabase, set,ref } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+              import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+          
+              // Your web app's Firebase configuration
+              const firebaseConfig = {
+                  apiKey: "AIzaSyD0R29hzTEcZqRTBFx7XNbWf2kvuYmJFNQ",
+                  authDomain: "authencation-app-b0f51.firebaseapp.com",
+                  databaseURL: "https://authencation-app-b0f51-default-rtdb.firebaseio.com",
+                  projectId: "authencation-app-b0f51",
+                  storageBucket: "authencation-app-b0f51.appspot.com",
+                  messagingSenderId: "919237596179",
+                  appId: "1:919237596179:web:a7617a7cafb4f72ffb5be6"
+              };
+          
+              // Initialize Firebase
+              const app = initializeApp(firebaseConfig);
+              const database = getDatabase(app);
+              const auth = getAuth();
+          
+              document.getElementById('signUp').addEventListener("click", e => {
+                     e.preventDefault();
+
+                  var username = document.getElementById('username').value;
+                  var email = document.getElementById('email').value;
+                  var password = document.getElementById('password').value;
+          
+                  createUserWithEmailAndPassword(auth, email, password)
+                      .then((userCredential) => {
+                          // Signed up 
+                          const user = userCredential.user;
+                          set(ref(database,'users/'+ user.uid),{
+                            username: username,
+                            email: email
+                          })
+                          alert("user created");
+                          window.location.href = "{{ url_for('loginpage') }}";
+                          // ...
+                      })
+                      .catch((error) => {
+                          const errorCode = error.code;
+                          const errorMessage = error.message;
+                          if (errorCode === 'auth/user-not-found') {
+                                   alert('User not found. Please sign up.');
+                // Add logic to redirect to sign-up page or show a sign-up form
+                            } else {
+                                   alert(errorMessage);
+                            }
+                      });
+              });
+          </script>
+          
+</body>
+</html>
